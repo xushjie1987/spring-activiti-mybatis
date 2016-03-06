@@ -44,7 +44,8 @@
 		<property name="dataSource" ref="aDataSource" />
 		<property name="transactionManager" ref="aTransactionManager" />
 		<property name="databaseSchemaUpdate" value="true" />
-		<property name="jobExecutorActivate" value="false" />
+		<!-- 默认此参数为false，此时timer不会触发定时事件，必须设置为true -->
+		<property name="jobExecutorActivate" value="true" />
 		<property name="beans">
 			<map>
 				<entry key="left" value-ref="leftService" />

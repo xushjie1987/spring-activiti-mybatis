@@ -2,6 +2,8 @@ package com.oneapm.activiti.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.oneapm.activiti.test.domain.TblA;
 import com.oneapm.activiti.test.mapper.TblAMapper;
@@ -22,7 +24,22 @@ public class LeftService {
     
     private Integer    count = 1;
     
+    /**
+     * 
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
     public void inserOneTblA() {
+        TblA ra = new TblA();
+        ra.setA1(count++);
+        ra.setA2("a");
+        tblAMapper.insertSelective(ra);
+    }
+    
+    /**
+     * 
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+    public void loopInsertTblA() {
         TblA ra = new TblA();
         ra.setA1(count++);
         ra.setA2("a");

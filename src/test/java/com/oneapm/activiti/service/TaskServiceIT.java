@@ -27,9 +27,24 @@ public class TaskServiceIT extends ITContext {
     @Autowired
     private ManagementService managementService;
     
+    /**
+     * 普通的顺序流程
+     */
     @Test
     public void case_01() {
         runtimeService.startProcessInstanceByKey("oneTaskProcess");
+    }
+    
+    /**
+     * 定时timer的job，不需要手动触发
+     */
+    @Test
+    public void case_02() {
+        try {
+            Thread.currentThread().join();
+        } catch (InterruptedException ingore) {
+            // skip
+        }
     }
     
 }

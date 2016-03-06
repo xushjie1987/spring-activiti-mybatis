@@ -2,6 +2,8 @@ package com.oneapm.activiti.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.oneapm.activiti.test.domain.TblC;
 import com.oneapm.activiti.test.mapper.TblAMapper;
@@ -22,6 +24,10 @@ public class JoinService {
     
     private Integer    count = 1;
     
+    /**
+     * 
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
     public void inserOneTblC() {
         TblC rc = new TblC();
         rc.setC1(count++);
