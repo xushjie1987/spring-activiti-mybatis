@@ -47,4 +47,16 @@ public class TaskServiceIT extends ITContext {
         }
     }
     
+    /**
+     * 实际执行为串行独占模式 <br>
+     * 如果servicetask配置为： <br>
+     * activiti:async="true" activiti:exclusive="false" <br>
+     * 将报错： <br>
+     * JobEntity [id=40016] was updated by another transaction concurrently
+     */
+    @Test
+    public void case_03() {
+        runtimeService.startProcessInstanceByKey("joinProcess");
+    }
+    
 }

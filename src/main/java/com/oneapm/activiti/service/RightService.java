@@ -1,5 +1,7 @@
 package com.oneapm.activiti.service;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -33,6 +35,24 @@ public class RightService {
         rb.setB1(count++);
         rb.setB2("b");
         tblBMapper.insertSelective(rb);
+    }
+    
+    /**
+     * 
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+    public void forkRight() {
+        Date start = new Date();
+        TblB rb = new TblB();
+        rb.setB1(count * 20);
+        rb.setB2("b");
+        tblBMapper.insertSelective(rb);
+        try {
+            Thread.sleep(5000);
+            System.out.println(start + " - " + new Date());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     
     /**
