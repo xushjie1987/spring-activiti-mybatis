@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+	xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+	typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+	targetNamespace="simple">
+	
+    <!-- process flow -->
+	<process id="oneTaskProcess" name="The One Task Process"
+		isExecutable="true">
+		<startEvent id="theStart"></startEvent>
+		<sequenceFlow id="flow1" sourceRef="theStart" targetRef="service1"></sequenceFlow>
+		<serviceTask id="service1" name="insertTblA"
+			activiti:expression="#{left.inserOneTblA()}"></serviceTask>
+		<sequenceFlow id="flow2" sourceRef="service1" targetRef="service2"></sequenceFlow>
+		<serviceTask id="service2" name="insertTblB"
+			activiti:expression="#{right.inserOneTblB()}"></serviceTask>
+		<sequenceFlow id="flow3" sourceRef="service2" targetRef="service3"></sequenceFlow>
+		<serviceTask id="service3" name="insertTblC"
+			activiti:expression="#{join.inserOneTblC()}"></serviceTask>
+		<sequenceFlow id="flow4" sourceRef="service3" targetRef="theEnd"></sequenceFlow>
+		<endEvent id="theEnd"></endEvent>
+	</process>
+
+</definitions>

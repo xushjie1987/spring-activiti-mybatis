@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- druid datasource -->
+	<bean id="tDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url">
+			<value>
+				jdbc:mysql://127.0.0.1:3314/test?useUnicode=true&amp;characterEncoding=utf-8
+			</value>
+		</property>
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+		<property name="dbType" value="mysql" />
+		<property name="filters" value="stat,config" />
+		<property name="maxActive" value="100" />
+		<property name="initialSize" value="10" />
+		<property name="maxWait" value="60000" />
+		<property name="minIdle" value="10" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="SELECT 'x'" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize"
+			value="50" />
+		<property name="maxOpenPreparedStatements" value="100" />
+		<property name="connectionProperties" value="config.decrypt=false" />
+	</bean>
+
+	<!-- session工厂 -->
+	<bean id="tSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="tDataSource" />
+		<property name="mapperLocations" value="classpath*:META-INF/test/*Mapper.xml" />
+	</bean>
+
+	<!-- scanner批量创建bean -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.oneapm.activiti.test.mapper" />
+		<property name="sqlSessionFactoryBeanName" value="tSqlSessionFactory" />
+	</bean>
+
+</beans>

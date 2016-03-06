@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- druid datasource -->
+	<bean id="aDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url">
+			<value>
+				jdbc:mysql://127.0.0.1:3314/activiti?useUnicode=true&amp;characterEncoding=utf-8
+			</value>
+		</property>
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+		<property name="dbType" value="mysql" />
+		<property name="filters" value="stat,config" />
+		<property name="maxActive" value="100" />
+		<property name="initialSize" value="10" />
+		<property name="maxWait" value="60000" />
+		<property name="minIdle" value="10" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="SELECT 'x'" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize"
+			value="50" />
+		<property name="maxOpenPreparedStatements" value="100" />
+		<property name="connectionProperties" value="config.decrypt=false" />
+	</bean>
+
+	<!-- Spring事务管理器 -->
+	<bean id="aTransactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="aDataSource" />
+	</bean>
+
+	<!-- engine configuration -->
+	<bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+		<property name="dataSource" ref="aDataSource" />
+		<property name="transactionManager" ref="aTransactionManager" />
+		<property name="databaseSchemaUpdate" value="true" />
+		<property name="jobExecutorActivate" value="false" />
+		<property name="beans">
+			<map>
+				<entry key="left" value-ref="leftService" />
+				<entry key="right" value-ref="rightService" />
+				<entry key="join" value-ref="joinService" />
+			</map>
+		</property>
+		<property name="deploymentResources">
+			<array>
+				<value>classpath*:META-INF/activiti/*.bpmn</value>
+				<value>classpath*:META-INF/activiti/*.bpmn20.xml</value>
+			</array>
+		</property>
+		<property name="deploymentMode" value="default" />
+	</bean>
+
+	<!-- engine -->
+	<bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+		<property name="processEngineConfiguration" ref="processEngineConfiguration" />
+	</bean>
+
+	<!-- repository service -->
+	<bean id="repositoryService" factory-bean="processEngine"
+		factory-method="getRepositoryService" />
+
+	<!-- runtime service -->
+	<bean id="runtimeService" factory-bean="processEngine"
+		factory-method="getRuntimeService" />
+
+	<!-- task service -->
+	<bean id="taskService" factory-bean="processEngine"
+		factory-method="getTaskService" />
+
+	<!-- history service -->
+	<bean id="historyService" factory-bean="processEngine"
+		factory-method="getHistoryService" />
+
+	<!-- management service -->
+	<bean id="managementService" factory-bean="processEngine"
+		factory-method="getManagementService" />
+
+</beans>
