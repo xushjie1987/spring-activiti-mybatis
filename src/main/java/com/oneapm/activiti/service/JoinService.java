@@ -1,5 +1,7 @@
 package com.oneapm.activiti.service;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -31,6 +33,18 @@ public class JoinService {
     public void inserOneTblC() {
         TblC rc = new TblC();
         rc.setC1(count++);
+        rc.setC2("c");
+        tblCMapper.insertSelective(rc);
+    }
+    
+    /**
+     * 
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = { Exception.class })
+    public void joinFork() {
+        System.out.println(new Date());
+        TblC rc = new TblC();
+        rc.setC1(count * 30);
         rc.setC2("c");
         tblCMapper.insertSelective(rc);
     }
