@@ -59,4 +59,12 @@ public class TaskServiceIT extends ITContext {
         runtimeService.startProcessInstanceByKey("joinProcess");
     }
     
+    /**
+     * 测试了activiti:class
+     */
+    @Test
+    public void case_04() {
+        runtimeService.startProcessInstanceByKey("delegateProcess");
+    }
+    
 }
